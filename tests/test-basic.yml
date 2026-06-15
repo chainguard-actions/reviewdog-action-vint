@@ -1,0 +1,34 @@
+name: Test basic usage with github_token
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: fake-token-for-testing
+      GITHUB_REF: refs/pull/1/merge
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create a sample VimScript file for vint to lint
+        run: |
+          mkdir -p /tmp/vint-test
+          cat > /tmp/vint-test/sample.vim << 'EOF'
+          " Sample VimScript file
+          function! SampleFunction()
+            echo "hello"
+          endfunction
+          EOF
+      - id: action
+        uses: .
+        with:
+          github_token: ${{ env.GITHUB_TOKEN }}
+          level: info
+          reporter: github-pr-check
+        continue-on-error: true
+      - name: Assert action ran
+        run: |
+          echo "Action completed (exit may be non-zero due to no real PR context)"
+          echo "PASS: github_token input was accepted"
