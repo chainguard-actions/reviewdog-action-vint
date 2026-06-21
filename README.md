@@ -1,18 +1,54 @@
-# reviewdog/action-vint
+# GitHub Action: Run vint with reviewdog
 
-🐶 Run vint with reviewdog on pull requests to improve code review experience.
+[![Docker Image CI](https://github.com/reviewdog/action-vint/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/reviewdog/action-vint/actions)
+[![depup](https://github.com/reviewdog/action-vint/workflows/depup/badge.svg)](https://github.com/reviewdog/action-vint/actions?query=workflow%3Adepup)
+[![release](https://github.com/reviewdog/action-vint/workflows/release/badge.svg)](https://github.com/reviewdog/action-vint/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-vint?logo=github&sort=semver)](https://github.com/reviewdog/action-vint/releases)
+[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/reviewdog/action-vint](https://github.com/reviewdog/action-vint).
+This action runs [vint](https://github.com/Kuniwak/vint) with
+[reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve
+code review experience.
 
-## Versions
+[![github-pr-check example](https://user-images.githubusercontent.com/3797062/65413404-57887a00-de2c-11e9-8f45-0729808b1c29.png)](https://github.com/reviewdog/action-vint/pull/1)
+[![github-pr-review example](https://user-images.githubusercontent.com/3797062/65413352-3f185f80-de2c-11e9-956e-569eeaccac5f.png)](https://github.com/reviewdog/action-vint/pull/1)
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1.15.0 | [`v1.15.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.15.0) | [`d49ec67`](https://github.com/reviewdog/action-vint/commit/d49ec6787367b935683c868ed557835ce19215f3) |
-| v1.16.0 | [`v1.16.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.16.0) | [`689a994`](https://github.com/reviewdog/action-vint/commit/689a994521c6a60eb17324b417d5264ad36d05ce) |
-| v1.17.0 | [`v1.17.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.0) | [`6b002bd`](https://github.com/reviewdog/action-vint/commit/6b002bde4f628db9551a2144d3a615f9159cf9c7) |
-| v1.17.1 | [`v1.17.1`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.1) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) |
-| v1.17.2 | [`v1.17.2`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.2) | [`b249164`](https://github.com/reviewdog/action-vint/commit/b249164f0c17d7a24aecccea84f2c7e132072731) |
+## Inputs
+
+### `github_token`
+
+**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`'.
+
+### `level`
+
+Optional. Report level for reviewdog [info,warning,error].
+It's same as `-level` flag of reviewdog.
+
+### `reporter`
+
+Reporter of reviewdog command [github-pr-check,github-pr-review].
+Default is github-pr-check.
+github-pr-review can use Markdown and add a link to rule page in reviewdog reports.
+
+## Example usage
+
+### [.github/workflows/reviewdog.yml](.github/workflows/reviewdog.yml)
+
+```yml
+name: reviewdog
+on: [pull_request]
+jobs:
+  vint:
+    name: runner / vint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: vint
+        uses: reviewdog/action-vint@b249164f0c17d7a24aecccea84f2c7e132072731 # v1.17.2
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review # Change reporter.
+```
 
 ## Privacy
 
