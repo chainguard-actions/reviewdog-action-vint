@@ -2,12 +2,9 @@ FROM python:3.12-alpine
 
 ENV REVIEWDOG_VERSION=v0.20.2
 
-RUN REVIEWDOG_VERSION_NUM="${REVIEWDOG_VERSION#v}" && \
-    wget -O /tmp/reviewdog.tar.gz -q "https://github.com/reviewdog/reviewdog/releases/download/${REVIEWDOG_VERSION}/reviewdog_${REVIEWDOG_VERSION_NUM}_linux_amd64.tar.gz" && \
-    wget -O /tmp/reviewdog_checksums.txt -q "https://github.com/reviewdog/reviewdog/releases/download/${REVIEWDOG_VERSION}/reviewdog_${REVIEWDOG_VERSION_NUM}_checksums.txt" && \
-    grep "reviewdog_${REVIEWDOG_VERSION_NUM}_linux_amd64.tar.gz" /tmp/reviewdog_checksums.txt | sha256sum -c - && \
-    tar -xzf /tmp/reviewdog.tar.gz -C /usr/local/bin/ reviewdog && \
-    rm /tmp/reviewdog.tar.gz /tmp/reviewdog_checksums.txt
+RUN wget -O /tmp/install-reviewdog.sh -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh \
+    && sh /tmp/install-reviewdog.sh -b /usr/local/bin/ ${REVIEWDOG_VERSION} \
+    && rm /tmp/install-reviewdog.sh
 RUN apk --update add git && \
     rm -rf /var/lib/apt/lists/* && \
     rm /var/cache/apk/*

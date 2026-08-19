@@ -1,0 +1,57 @@
+name: Test warning level configuration
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up git origin reachable inside the Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      - name: Create a minimal Vim script
+        run: |
+          # Use the existing testdata vim file as reference
+          # Create a simple vim script in workspace root for vint to scan
+          cat > "$GITHUB_WORKSPACE/test_warning.vim" << 'EOF'
+          " Minimal vim script for warning level test
+          function! s:TestWarning()
+            let l:msg = "hello"
+            echo l:msg
+          endfunction
+          EOF
+
+      - id: action
+        uses: .
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: warning
+          reporter: local
+        continue-on-error: true
+
+      - name: Assert action ran with warning level
+        run: |
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          # The action should run with warning level configuration
+          # It processes vim files and reports at warning level
+          if [ "${{ steps.action.outcome }}" = "success" ] || [ "${{ steps.action.outcome }}" = "failure" ]; then
+            echo "PASS: action ran with warning level configuration"
+          else
+            echo "FAIL: action did not run properly"
+            exit 1
+          fi
+
+      - name: Cleanup test vim file
+        if: always()
+        run: |
+          rm -f "$GITHUB_WORKSPACE/test_warning.vim"

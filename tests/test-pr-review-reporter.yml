@@ -1,0 +1,34 @@
+name: Test github-pr-review reporter with info level
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/pull/3/merge
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run vint action with github-pr-review reporter and info level
+        id: action
+        uses: .
+        with:
+          github_token: fake-token-for-local-testing
+          level: info
+          reporter: github-pr-review
+        continue-on-error: true
+
+      - name: Verify action was attempted with pr-review reporter
+        run: |
+          echo "Action outcome: ${{ steps.action.outcome }}"
+          # The action should either succeed or fail due to API issues (not due to missing vint/reviewdog)
+          # We accept both 'success' and 'failure' as valid outcomes since
+          # reviewdog will fail to post to GitHub with a fake token
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped unexpectedly"
+            exit 1
+          fi
+          echo "PASS: action was attempted with github-pr-review reporter (outcome: ${{ steps.action.outcome }})"
