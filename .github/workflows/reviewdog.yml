@@ -1,0 +1,30 @@
+name: reviewdog
+on: [pull_request]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  vint:
+    name: runner / vint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code.
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: vint
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+      - name: vint-check
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-check
+          level: warning
+      - name: vint-pr-review
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review

@@ -1,28 +1,48 @@
-name: Test info level reporting
+name: Test vint with info level
 on:
   workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_REF: refs/heads/main
-      GITHUB_EVENT_NAME: push
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
 
-      - id: action
+      - name: Create a Vim script for vint to lint
+        run: |
+          cat > "$GITHUB_WORKSPACE/sample.vim" << 'EOF'
+          " Sample Vim script
+          function! s:DoSomething() abort
+            let l:msg = "hello"
+            echo l:msg
+          endfunction
+          EOF
+
+      - name: Set up git origin reachable inside Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      - name: Run vint action with info level
+        id: vint
         uses: .
-        continue-on-error: true
         with:
           github_token: ${{ github.token }}
           level: info
-          reporter: local
+          reporter: github-pr-check
+        continue-on-error: true
 
       - name: Assert action ran with info level
         run: |
-          echo "Action step outcome: ${{ steps.action.outcome }}"
-          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
-            echo "FAIL: action step was skipped"
+          echo "vint action step outcome: ${{ steps.vint.outcome }}"
+          if [ "${{ steps.vint.outcome }}" = "skipped" ]; then
+            echo "FAIL: action step was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran with info level (outcome: ${{ steps.action.outcome }})"
+          echo "PASS: action ran with info level (outcome: ${{ steps.vint.outcome }})"

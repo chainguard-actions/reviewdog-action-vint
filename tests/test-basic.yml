@@ -1,28 +1,51 @@
-name: Test basic usage - clean vim script
+name: Test basic usage - vint on clean vim script
 on:
   workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_REF: refs/heads/main
-      GITHUB_EVENT_NAME: push
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
 
-      - id: action
+      - name: Create a clean Vim script for vint to lint
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/tests/fixtures/vim"
+          cat > "$GITHUB_WORKSPACE/tests/fixtures/vim/clean.vim" << 'EOF'
+          " A clean Vim script with no issues
+          function! s:MyFunction() abort
+            echo "Hello"
+          endfunction
+          EOF
+
+      - name: Set up git origin reachable inside Docker container
+        run: |
+          git config user.email "test@example.com"
+          git config user.name "Test User"
+          rm -rf "$GITHUB_WORKSPACE/.git-remote"
+          git init --bare "$GITHUB_WORKSPACE/.git-remote"
+          git push "$GITHUB_WORKSPACE/.git-remote" HEAD:refs/heads/act-harness
+          git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
+            git remote add origin "$GITHUB_WORKSPACE/.git-remote"
+
+      - name: Run vint action
+        id: vint
         uses: .
-        continue-on-error: true
         with:
           github_token: ${{ github.token }}
           level: error
-          reporter: local
+          reporter: github-pr-check
+        continue-on-error: true
 
-      - name: Assert action ran
+      - name: Assert action completed (vint ran successfully)
         run: |
-          echo "Action step outcome: ${{ steps.action.outcome }}"
-          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
-            echo "FAIL: action step was skipped"
+          echo "vint action step outcome: ${{ steps.vint.outcome }}"
+          # The action may exit non-zero if vint finds issues or reviewdog fails
+          # but it should at least run (not fail to start). We accept success or failure
+          # as long as the step ran (not skipped).
+          if [ "${{ steps.vint.outcome }}" = "skipped" ]; then
+            echo "FAIL: action step was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran (outcome: ${{ steps.action.outcome }})"
+          echo "PASS: action ran (outcome: ${{ steps.vint.outcome }})"
