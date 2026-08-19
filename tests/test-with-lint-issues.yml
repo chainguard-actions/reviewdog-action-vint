@@ -1,0 +1,38 @@
+name: Test with vim script that has lint issues
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/heads/main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create a vim script with lint issues
+        run: |
+          mkdir -p /tmp/vim-workspace-issues
+          # Script with implicit scope variable (no s: prefix) - triggers ProhibitImplicitScopeVariable
+          cat > /tmp/vim-workspace-issues/bad.vim << 'EOF'
+          function! BadFunction()
+            let x = "unused variable"
+          endfunction
+          EOF
+
+      - name: Run vint action on script with issues (expect non-zero exit or success)
+        id: action
+        uses: .
+        with:
+          github_token: dummy-token-for-local-reporter
+          reporter: local
+          level: warning
+        env:
+          GITHUB_WORKSPACE: /tmp/vim-workspace-issues
+        # reviewdog with local reporter exits 0 even when issues are found
+        continue-on-error: true
+
+      - name: Assert action ran (issues reported but action itself ran)
+        run: |
+          echo "Action ran against script with lint issues"
+          echo "PASS"

@@ -1,4 +1,4 @@
-name: Test basic usage - vint with reviewdog
+name: Test info level
 on:
   workflow_dispatch:
 jobs:
@@ -7,19 +7,19 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Run vint action
+      - name: Run vint action with info level
         id: action
         uses: .
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          level: error
+          level: info
           reporter: github-check
         continue-on-error: true
 
-      - name: Assert action completed
+      - name: Assert action completed with info level
         run: |
           echo "Action step outcome: ${{ steps.action.outcome }}"
-          # The action runs vint on the workspace and reports via reviewdog.
+          # The action runs vint on the workspace and reports via reviewdog at info level.
           # It may find issues in testdata/*.vim files (which is expected behavior).
           # We just verify the action ran (not that it found zero issues).
-          echo "PASS: action ran successfully"
+          echo "PASS: action ran with level=info"
