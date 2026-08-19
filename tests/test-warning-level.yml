@@ -1,4 +1,4 @@
-name: Test basic usage - vint with local reporter
+name: Test warning level reporter
 on:
   workflow_dispatch:
 jobs:
@@ -22,20 +22,20 @@ jobs:
         continue-on-error: true
         with:
           github_token: ${{ github.token }}
-          level: error
+          level: warning
           reporter: local
 
-      - name: Assert action completed (findings are expected with local reporter)
+      - name: Assert action completed with warning level
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "action outcome: $OUTCOME"
-          # The action runs vint and reports via reviewdog local reporter.
+          # The action runs vint and reports via reviewdog local reporter at warning level.
           # With local reporter, reviewdog exits 1 if there are findings at the
           # specified level. Either success (no findings) or failure (findings found)
           # means the action ran correctly.
           if [ "$OUTCOME" = "success" ] || [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action completed with outcome=$OUTCOME"
+            echo "PASS: action completed with warning level, outcome=$OUTCOME"
           else
             echo "FAIL: unexpected outcome=$OUTCOME"
             exit 1

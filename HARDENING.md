@@ -8,27 +8,31 @@
 
 **Test Policy SHA:** `843adf9e4b8f85d0c08b27b9d0b09dd094b54702`
 
-**Harden Agent Version:** `1`
+**Harden Agent Version:** `2`
 
 Action **reviewdog--action-vint/v1.17.1** was hardened automatically. 1 finding(s) were identified and resolved across 1 iteration(s).
 
 ## Findings Fixed
 
-### unsafe-shell (severity: high)
+### missing-permissions (severity: medium)
 
-The Dockerfile (a supporting script referenced by action.yml via `image: 'Dockerfile'`) pipes a remotely fetched install script directly to `sh` without first downloading and verifying it. Line 5: `RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}`. This allows a compromised or man-in-the-middle response to execute arbitrary code during the Docker image build.
+None of the workflow files define a top-level `permissions:` key, and no individual job within any of these files defines its own `permissions:` block. Without explicit permissions, workflows run with the default (potentially broad) token permissions, violating the principle of least privilege.
 
 Locations:
 
-- `Dockerfile:5`
+- `.github/workflows/depup.yml:1`
+- `.github/workflows/dockerimage.yml:1`
+- `.github/workflows/release.yml:1`
+- `.github/workflows/reviewdog.yml:1`
+- `.github/workflows/update_semver.yml:1`
 
 ## Iteration Notes
 
 ### Iteration 1
 
-**Fixes applied:** unsafe-shell
+**Fixes applied:** missing-permissions
 
 **Notes:**
 
-Fixed the Dockerfile's unsafe pipe-to-shell pattern on line 5. Replaced `wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /usr/local/bin/ ${REVIEWDOG_VERSION}` with a safe alternative that: (1) downloads the pre-built reviewdog binary tarball directly from GitHub releases, (2) downloads the official checksums file, (3) verifies the SHA-256 checksum before use, (4) extracts only the reviewdog binary, and (5) cleans up temporary files. This eliminates the remote script execution entirely and adds integrity verification.
+Added top-level `permissions:` blocks to all five workflow files with minimal required permissions: depup.yml (contents:write, pull-requests:write), dockerimage.yml (contents:read), release.yml (contents:write, pull-requests:write), reviewdog.yml (contents:read, pull-requests:write, checks:write), update_semver.yml (contents:write).
 

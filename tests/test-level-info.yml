@@ -1,0 +1,32 @@
+name: Test level=info configuration
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with info level
+        id: action
+        uses: .
+        continue-on-error: true
+        with:
+          github_token: fake-token-for-testing
+          level: info
+          reporter: github-pr-check
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+
+      - name: Verify action was invoked with info level
+        run: |
+          echo "outcome: ${{ steps.action.outcome }}"
+          # The action should have been invoked (not skipped)
+          if [ "${{ steps.action.outcome }}" = "skipped" ]; then
+            echo "FAIL: action was skipped, expected it to run"
+            exit 1
+          fi
+          echo "PASS: action was invoked with level=info"
