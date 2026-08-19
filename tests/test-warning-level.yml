@@ -1,4 +1,4 @@
-name: Test basic usage - clean vim script
+name: Test warning level with local reporter
 on:
   workflow_dispatch:
 jobs:
@@ -20,15 +20,15 @@ jobs:
           git remote set-url origin "$GITHUB_WORKSPACE/.git-remote" 2>/dev/null || \
             git remote add origin "$GITHUB_WORKSPACE/.git-remote"
 
-      - name: Run vint action with local reporter (no PR required)
+      - name: Run vint action with warning level and local reporter
         id: action
         uses: .
         with:
           github_token: ${{ github.token }}
-          level: info
+          level: warning
           reporter: local
 
-      - name: Assert action completed successfully
+      - name: Assert action completed with warning level
         run: |
-          echo "Action completed successfully with local reporter"
-          echo "PASS: vint action ran without fatal error"
+          echo "Action completed with warning level"
+          echo "PASS: vint action ran with warning level without fatal error"
