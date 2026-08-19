@@ -1,0 +1,31 @@
+name: Test github-pr-review reporter - vint with reviewdog
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_REF: refs/pull/1/merge
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Run vint action with github-pr-review reporter (allow failure - fake token cannot post to GitHub API)
+        id: action
+        uses: .
+        with:
+          github_token: fake-token-for-testing
+          level: error
+          reporter: github-pr-review
+        continue-on-error: true
+      - name: Assert action ran with pr-review reporter
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "action outcome: $OUTCOME"
+          if [ "$OUTCOME" = "skipped" ]; then
+            echo "FAIL: action step was skipped, expected it to run"
+            exit 1
+          fi
+          echo "PASS: action step ran with github-pr-review reporter (outcome=$OUTCOME)"

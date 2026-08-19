@@ -1,4 +1,4 @@
-name: Test basic vint usage
+name: Test vint with info level
 on:
   workflow_dispatch:
 jobs:
@@ -7,14 +7,14 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Run vint action on workspace (local reporter)
+      - name: Run vint action with info level (local reporter)
         id: action
         uses: .
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          level: 'error'
+          level: 'info'
           reporter: 'local'
 
-      - name: Assert action completed successfully
+      - name: Assert action completed with info level
         run: |
-          echo "PASS: vint action ran successfully with local reporter"
+          echo "PASS: vint action ran successfully with info level and local reporter"
