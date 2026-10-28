@@ -6,21 +6,21 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) |
-| v1.15 | [`v1.15`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.15) | [`d49ec67`](https://github.com/reviewdog/action-vint/commit/d49ec6787367b935683c868ed557835ce19215f3) |
-| v1.15.0 | [`v1.15.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.15.0) | [`d49ec67`](https://github.com/reviewdog/action-vint/commit/d49ec6787367b935683c868ed557835ce19215f3) |
-| v1.16 | [`v1.16`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.16) | [`689a994`](https://github.com/reviewdog/action-vint/commit/689a994521c6a60eb17324b417d5264ad36d05ce) |
-| v1.16.0 | [`v1.16.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.16.0) | [`689a994`](https://github.com/reviewdog/action-vint/commit/689a994521c6a60eb17324b417d5264ad36d05ce) |
-| v1.17 | [`v1.17`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) |
-| v1.17.0 | [`v1.17.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.0) | [`6b002bd`](https://github.com/reviewdog/action-vint/commit/6b002bde4f628db9551a2144d3a615f9159cf9c7) |
-| v1.17.1 | [`v1.17.1`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.1) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) |
-| v1.17.2 | [`v1.17.2`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.2) | [`b249164`](https://github.com/reviewdog/action-vint/commit/b249164f0c17d7a24aecccea84f2c7e132072731) |
-| v1.18 | [`v1.18`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.18) | [`7d853f6`](https://github.com/reviewdog/action-vint/commit/7d853f6a655c6940837973e80c2b63fce67c9c8e) |
-| v1.18.0 | [`v1.18.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.18.0) | [`7d853f6`](https://github.com/reviewdog/action-vint/commit/7d853f6a655c6940837973e80c2b63fce67c9c8e) |
-| v1.19.0 | [`v1.19.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.19.0) | [`101f310`](https://github.com/reviewdog/action-vint/commit/101f3104da66cf84d81438957b83e07c530c8ce3) |
-| v1.20.0 | [`v1.20.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.20.0) | [`2b88e94`](https://github.com/reviewdog/action-vint/commit/2b88e94db40a6876c6b2f51bbc320fd8e979529f) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v1 | [`v1`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) | — |
+| v1.15 | [`v1.15`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.15) | [`d49ec67`](https://github.com/reviewdog/action-vint/commit/d49ec6787367b935683c868ed557835ce19215f3) | — |
+| v1.15.0 | [`v1.15.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.15.0) | [`d49ec67`](https://github.com/reviewdog/action-vint/commit/d49ec6787367b935683c868ed557835ce19215f3) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.15.0/HARDENING.md) |
+| v1.16 | [`v1.16`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.16) | [`689a994`](https://github.com/reviewdog/action-vint/commit/689a994521c6a60eb17324b417d5264ad36d05ce) | — |
+| v1.16.0 | [`v1.16.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.16.0) | [`689a994`](https://github.com/reviewdog/action-vint/commit/689a994521c6a60eb17324b417d5264ad36d05ce) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.16.0/HARDENING.md) |
+| v1.17 | [`v1.17`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) | — |
+| v1.17.0 | [`v1.17.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.0) | [`6b002bd`](https://github.com/reviewdog/action-vint/commit/6b002bde4f628db9551a2144d3a615f9159cf9c7) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.17.0/HARDENING.md) |
+| v1.17.1 | [`v1.17.1`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.1) | [`7b9cdd7`](https://github.com/reviewdog/action-vint/commit/7b9cdd7851b16d20814f3fe8dfa7691e0b6bbe39) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.17.1/HARDENING.md) |
+| v1.17.2 | [`v1.17.2`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.17.2) | [`b249164`](https://github.com/reviewdog/action-vint/commit/b249164f0c17d7a24aecccea84f2c7e132072731) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.17.2/HARDENING.md) |
+| v1.18 | [`v1.18`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.18) | [`7d853f6`](https://github.com/reviewdog/action-vint/commit/7d853f6a655c6940837973e80c2b63fce67c9c8e) | — |
+| v1.18.0 | [`v1.18.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.18.0) | [`7d853f6`](https://github.com/reviewdog/action-vint/commit/7d853f6a655c6940837973e80c2b63fce67c9c8e) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.18.0/HARDENING.md) |
+| v1.19.0 | [`v1.19.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.19.0) | [`101f310`](https://github.com/reviewdog/action-vint/commit/101f3104da66cf84d81438957b83e07c530c8ce3) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.19.0/HARDENING.md) |
+| v1.20.0 | [`v1.20.0`](https://github.com/chainguard-actions/reviewdog-action-vint/tree/v1.20.0) | [`2b88e94`](https://github.com/reviewdog/action-vint/commit/2b88e94db40a6876c6b2f51bbc320fd8e979529f) | [`HARDENING.md`](https://github.com/chainguard-actions/reviewdog-action-vint/blob/v1.20.0/HARDENING.md) |
 
 ## Privacy
 
